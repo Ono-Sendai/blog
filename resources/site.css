@@ -1,0 +1,226 @@
+body
+{
+	margin: 0;
+	padding: 0;
+	background-color: rgb(220, 220, 220);
+
+	font-family: Helvetica;
+
+    color: rgb(20, 20, 20);
+
+	line-height: 1.2;
+}
+
+.header
+{
+	height: 20px;
+}
+
+#header-image
+{
+	width: 600px;
+	height: 103px;
+	background-image: url("squares_crop_600.png");
+}
+
+
+#blogtitle
+{
+	width: 277px;
+	height: 42px;
+	border: none;
+}
+
+#blogtitle A:link { border-bottom: none; text-decoration: none; color: rgb(20, 20, 20); }
+#blogtitle A:visited { border-bottom: none; text-decoration: none; color: rgb(20, 20, 20); }
+#blogtitle A:hover { border-bottom: none; text-decoration: none; color: rgb(20, 20, 20); }
+#blogtitle A:active { border-bottom: none; text-decoration: none; color: rgb(20, 20, 20); }
+
+#blogtitle A img { border: none;}
+
+
+#subtitle
+{
+	padding-top: 20px;
+	padding-bottom: 20px;
+
+    color: rgb(20, 20, 20);
+}
+
+
+.main
+{
+	width: 900px;
+	margin: 0 auto;
+}
+
+.post
+{
+	padding-bottom: 20px;
+	clear: right;
+}
+
+
+.post-title
+{
+	font-size: 1.5em;
+	margin-bottom: 5px;
+	margin-top: 34px;
+	font-weight: bold; /* This should be at least as bold as h3 etc..*/
+}
+
+.post-title A:link { border-bottom: none; text-decoration: none; color: rgb(20, 20, 20); }
+.post-title A:visited { border-bottom: none; text-decoration: none; color: rgb(20, 20, 20); }
+.post-title A:hover { text-decoration: underline; color: rgb(20, 20, 20); }
+.post-title A:active { text-decoration: underline; color: rgb(20, 20, 20); }
+
+
+
+h3
+{
+	padding-top: 5px;
+	font-weight: bold;
+}
+
+.left
+{
+	width: 600px;
+	margin-right: 200px;
+
+	/*background: rgba(200, 200, 200, 0.8);*/
+	
+	/*text-align:justify;*/
+
+    padding-left:   0px;
+	padding-right:  0px;
+    padding-top:    16px;
+	padding-bottom: 30px;
+	/*float: right;*/
+
+	/*width: 900px;*/
+
+}
+
+.left-bottom
+{
+	float: left;
+	width: 260px;
+}
+
+.left-bottom-header
+{
+	padding-top: 40px;
+	padding-left: 8px;
+	font-weight: 800;
+	font-size: large;
+	/*font-family: Arial*/
+	font-family: Helvetica;
+}
+
+/* Default link style */
+A:link { color: rgb(20, 20, 20); text-decoration: none; border-bottom: 1px dotted #666; }
+A:visited { color: rgb(20, 20, 20); text-decoration: none; border-bottom: 1px dotted #666; }
+A:hover { color: rgb(20, 20, 20); text-decoration: underline; border-bottom: 1px dotted #666; }
+A:active { color: rgb(20, 20, 20); text-decoration: underline; border-bottom: 1px dotted #666; }
+
+/*
+.left-bottom-header A:link { text-decoration: none; color: Black; }
+.left-bottom-header A:visited { text-decoration: none; color: Black; }
+.left-bottom-header A:hover { text-decoration: underline; color: Black; }
+.left-bottom-header A:active { text-decoration: underline; color: Black; }
+*/
+
+
+.timestamp
+{
+	/*margin-top: -37px;*/
+	margin-bottom: 10px;
+	font-size: 0.75em;
+	text-align: left;
+	/*height: 40px;*/
+	/*width: 200px;*/
+	
+	/*float: right;*/
+	
+	/*position:relative;
+	top: -40px;*/
+
+    color: grey;
+}
+
+
+.right
+{
+	/*width: 900px;*/
+	width: 200px;
+	float: right;
+	
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 210px;
+	padding-bottom: 30px;
+}
+
+
+.right-subtitle
+{
+ color: Gray;
+}
+
+
+.right-link-group
+{
+	padding-top: 40px;
+}
+
+.external-link
+{
+	padding-top: 4px;
+}
+
+.main-right-image
+{
+	padding-top: 125px;
+	width: 546px;
+}
+
+
+
+
+.footer
+{
+    padding-top: 0px;
+    color: Gray;
+    /*text-align: center;*/
+	clear:both;
+	height: 100px;
+/*	background:#cc9;*/
+}
+
+.user
+{
+	padding-top: 20px;
+    padding-left: 8px;
+    color: Gray;
+}
+    
+
+.user A:link { text-decoration: none; color: Gray; }
+.user A:visited { text-decoration: none; color: Gray; }
+.user A:hover { text-decoration: underline; color: Gray; }
+.user A:active { text-decoration: underline; color: Gray; }
+
+.content-image
+{
+	padding-bottom: 10px;
+   /* padding-bottom: 50px;*/
+}
+
+#login
+{
+	/*float: right;*/
+	/*margin-bottom: -20px;*/
+	/*margin-top: -18px;*/
+}
+
+

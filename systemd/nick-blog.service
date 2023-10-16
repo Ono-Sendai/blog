@@ -1,0 +1,15 @@
+# This file should go into /etc/systemd/system/
+
+[Unit]
+Description=Nicks blog server
+After=network.target
+
+[Service]
+ExecStart=/home/nick/website/rundir/test_builds/nickblog
+WorkingDirectory=/home/nick/website/rundir/test_builds/
+Restart=on-failure
+User=nick
+Group=nick
+
+[Install]
+WantedBy=default.target

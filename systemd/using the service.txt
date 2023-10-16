@@ -1,0 +1,18 @@
+The service should be installed into /etc/systemd/user/ (on development)
+and in /etc/systemd/system (in production)
+
+Reload after adding the service:
+sudo systemctl daemon-reload
+
+(if you installed it as a user service in development, drop sudo and
+append --user to the following commands)
+
+Now enable and start the service:
+sudo systemctl enable nick-blog.service
+sudo systemctl start nick-blog.service
+
+you can see the status with (doesnt need sudo)
+systemctl status nick-blog.service
+
+and the log with
+sudo journalctl --unit=nick-blog.service
