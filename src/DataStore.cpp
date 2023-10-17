@@ -34,6 +34,8 @@ static const unsigned int EOF_MARKER = 10000;
 
 void DataStore::loadFromDisk()
 {
+	conPrint("DataStore::loadFromDisk");
+
 	try
 	{
 		Lock lock(mutex);
@@ -50,6 +52,8 @@ void DataStore::loadFromDisk()
 				// Read num posts
 				const uint32 num = file.readUInt32();
 
+				conPrint("Reading " + toString(num) + " post(s)...");
+
 				for(size_t i=0; i<num; ++i)
 				{
 					posts.push_back(Post());
@@ -61,6 +65,8 @@ void DataStore::loadFromDisk()
 				// Read num pages
 				const uint32 num = file.readUInt32();
 
+				conPrint("Reading " + toString(num) + " page(s)...");
+
 				for(size_t i=0; i<num; ++i)
 				{
 					pages.push_back(Page());
@@ -71,6 +77,8 @@ void DataStore::loadFromDisk()
 			{
 				// Read num users
 				const uint32 num = file.readUInt32();
+
+				conPrint("Reading " + toString(num) + " user(s)...");
 
 				for(size_t i=0; i<num; ++i)
 				{
