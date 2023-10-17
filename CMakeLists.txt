@@ -178,17 +178,17 @@ ${WEBSITE_CORE_DIR}/StaticAssetManager.h
 
 ########### Networking ################
 SET(networking_files
-${GLARE_CORE_TRUNK_DIR}/networking/fractionlistener.h
-${GLARE_CORE_TRUNK_DIR}/networking/ipaddress.cpp
-${GLARE_CORE_TRUNK_DIR}/networking/ipaddress.h
-${GLARE_CORE_TRUNK_DIR}/networking/mysocket.cpp
-${GLARE_CORE_TRUNK_DIR}/networking/mysocket.h
-${GLARE_CORE_TRUNK_DIR}/networking/networking.cpp
-${GLARE_CORE_TRUNK_DIR}/networking/networking.h
+${GLARE_CORE_TRUNK_DIR}/networking/FractionListener.h
+${GLARE_CORE_TRUNK_DIR}/networking/IPAddress.cpp
+${GLARE_CORE_TRUNK_DIR}/networking/IPAddress.h
+${GLARE_CORE_TRUNK_DIR}/networking/MySocket.cpp
+${GLARE_CORE_TRUNK_DIR}/networking/MySocket.h
+${GLARE_CORE_TRUNK_DIR}/networking/Networking.cpp
+${GLARE_CORE_TRUNK_DIR}/networking/Networking.h
 ${GLARE_CORE_TRUNK_DIR}/networking/NetworkingTests.cpp
 ${GLARE_CORE_TRUNK_DIR}/networking/NetworkingTests.h
-${GLARE_CORE_TRUNK_DIR}/networking/packet.cpp
-${GLARE_CORE_TRUNK_DIR}/networking/packet.h
+${GLARE_CORE_TRUNK_DIR}/networking/Packet.cpp
+${GLARE_CORE_TRUNK_DIR}/networking/Packet.h
 ${GLARE_CORE_TRUNK_DIR}/networking/SocketTests.cpp
 ${GLARE_CORE_TRUNK_DIR}/networking/SocketTests.h
 ${GLARE_CORE_TRUNK_DIR}/networking/SocketInterface.cpp
@@ -197,10 +197,10 @@ ${GLARE_CORE_TRUNK_DIR}/networking/TestSocket.cpp
 ${GLARE_CORE_TRUNK_DIR}/networking/TestSocket.h
 ${GLARE_CORE_TRUNK_DIR}/networking/TLSSocket.cpp
 ${GLARE_CORE_TRUNK_DIR}/networking/TLSSocket.h
-${GLARE_CORE_TRUNK_DIR}/networking/udpsocket.cpp
-${GLARE_CORE_TRUNK_DIR}/networking/udpsocket.h
-${GLARE_CORE_TRUNK_DIR}/networking/url.cpp
-${GLARE_CORE_TRUNK_DIR}/networking/url.h
+${GLARE_CORE_TRUNK_DIR}/networking/UDPSocket.cpp
+${GLARE_CORE_TRUNK_DIR}/networking/UDPSocket.h
+${GLARE_CORE_TRUNK_DIR}/networking/URL.cpp
+${GLARE_CORE_TRUNK_DIR}/networking/URL.h
 )
 
 ########### Utils ################

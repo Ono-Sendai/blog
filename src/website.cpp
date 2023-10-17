@@ -14,12 +14,11 @@ Copyright Nicholas Chapman 2023 -
 #include <RequestHandler.h>
 #include <ThreadManager.h>
 #include <PlatformUtils.h>
-#include <networking.h>
+#include <Networking.h>
 #include <Clock.h>
 #include <FileUtils.h>
 #include <ConPrint.h>
 #include <Parser.h>
-#include <networking.h>
 #include <SocketTests.h>
 #include <TestSocket.h>
 #include <Base64.h>

@@ -9,7 +9,7 @@ Copyright Nicholas Chapman 2023 -
 #include <InStream.h>
 #include <OutStream.h>
 #include "WebsiteExcep.h"
-#include <mysocket.h>
+#include <MySocket.h>
 #include <Lock.h>
 #include <Clock.h>
 #include <StringUtils.h>

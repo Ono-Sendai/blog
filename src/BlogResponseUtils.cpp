@@ -10,7 +10,7 @@ Copyright Nicholas Chapman 2023 -
 #include <Clock.h>
 #include <AESEncryption.h>
 #include <Exception.h>
-#include <mysocket.h>
+#include <MySocket.h>
 #include <Lock.h>
 #include <Clock.h>
 #include <StringUtils.h>
