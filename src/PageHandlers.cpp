@@ -115,6 +115,7 @@ void handleNewPagePost(DataStore& data_store, const web::RequestInfo& request_in
 		try
 		{
 			data_store.writeToDisk();
+			data_store.updateAssetManagerAndPageURLMap();
 		}
 		catch(web::WebsiteExcep& e)
 		{
@@ -142,7 +143,7 @@ void renderNewPagePage(DataStore& data_store, const web::RequestInfo& request_in
 	
 	page_out += "URL Title: <input size=\"80\" type=\"text\" name=\"url_title\" />   <br/>\n";
 	page_out += "Title: <input size=\"80\" type=\"text\" name=\"title\" />   <br/>\n";
-	page_out += "Content: <textarea rows=\"20\" cols=\"80\" name=\"content\"></textarea>   <br/>\n";
+	page_out += "Content: <textarea rows=\"60\" cols=\"200\" name=\"content\"></textarea>   <br/>\n";
 	page_out += "Published: <input type=\"checkbox\" name=\"published\" value=\"checked\" ><br/>\n";
 	page_out += "<input type=\"submit\" value=\"Submit\" / >\n";
 	
@@ -225,9 +226,9 @@ void renderEditPagePage(DataStore& data_store, const web::RequestInfo& request_i
 
 				page_out += "<form action=\"edit_page_post?page_id=" + toString(page_i) + "\" method=\"post\">\n";
 	
-				page_out += "URL Title: <textarea rows=\"1\" cols=\"80\" name=\"url_title\">" + page.url_title.HTMLEscaped() + "</textarea><br/>\n";
-				page_out += "Title: <textarea rows=\"1\" cols=\"80\" name=\"title\">" + page.title.HTMLEscaped() + "</textarea><br/>\n";
-				page_out += "Content: <textarea rows=\"20\" cols=\"80\" name=\"content\">" + page.content.HTMLEscaped() + "</textarea>   <br/>\n";
+				page_out += "URL Title: <textarea rows=\"1\" cols=\"200\" name=\"url_title\">" + page.url_title.HTMLEscaped() + "</textarea><br/>\n";
+				page_out += "Title: <textarea rows=\"1\" cols=\"200\" name=\"title\">" + page.title.HTMLEscaped() + "</textarea><br/>\n";
+				page_out += "Content: <textarea rows=\"60\" cols=\"200\" name=\"content\">" + page.content.HTMLEscaped() + "</textarea>   <br/>\n";
 				page_out += std::string("Published: <input type=\"checkbox\" name=\"published\" value=\"checked\" ") + (page.published ? "checked" : "") + "><br/>\n";
 				page_out += "<input type=\"submit\" value=\"Submit\" / >\n";
 	

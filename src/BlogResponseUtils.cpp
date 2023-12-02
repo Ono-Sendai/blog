@@ -111,22 +111,25 @@ const std::string standardFooter(DataStore& datastore, const web::RequestInfo& r
 	page_out += "</div>\n\n" // End left column div
 		"</td><td style=\"vertical-align: top; padding-top: 100px;\">\n" // End left table cell, start right table cell
 
-		"<div class=\"right\">\n";
-		/*"<div class=\"right-link-group\">\n";
+		"<div class=\"right\">\n"
 
-		"<div class=\"right-subtitle\">Static Pages on this website</div>\n";
+		"<div class=\"right-link-group\">\n"
+		"<div class=\"right-subtitle\">Pages</div>\n";
 
-	for(int page_i = (int)datastore.pages.size() - 1; page_i >= 0; --page_i)
 	{
-		const Page& page = datastore.pages[page_i];
-		if(!page.url_title.empty() && page.published)
+		Lock lock(datastore.mutex);
+		for(int page_i = (int)datastore.pages.size() - 1; page_i >= 0; --page_i)
 		{
-			page_out += "<div class=\"page-link\"><a href=\"/page/" + page.url_title.str() + "\">" + page.title.HTMLEscaped() + "</a></div>";
+			const Page& page = datastore.pages[page_i];
+			if(!page.url_title.empty() && page.published)
+			{
+				page_out += "<div class=\"page-link\"><a href=\"/page/" + page.url_title.str() + "\">" + page.title.HTMLEscaped() + "</a></div>";
+			}
 		}
-	}*/
+	}
 
 	page_out += 
-		//"</div>\n" // End right-link-group
+		"</div>\n" // End right-link-group from page list above
 		"<div class=\"right-link-group\">\n"
 		"<div class=\"right-subtitle\">Social media</div>\n"
 		"<div class=\"external-link\"><a href=\"https://twitter.com/NickChapmn\">Twitter / X</a></div>\n"
@@ -163,6 +166,7 @@ const std::string standardFooter(DataStore& datastore, const web::RequestInfo& r
 		"<div class=\"external-link\"><a href=\"https://medium.com/@jasonbooth_86226\">Jason Booth's blog</a></div>\n"
 		"<div class=\"external-link\"><a href=\"https://therealmjp.github.io/posts/\">The Danger Zone</a></div>\n"
 		"<div class=\"external-link\"><a href=\"https://www.jendrikillner.com/#posts\">Graphics Programming weekly</a></div>\n"
+		"<div class=\"external-link\"><a href=\"https://blog.demofox.org/\">The blog at the bottom of the sea</a></div>\n"
 		"</div>\n" // End right-link-group
 
 		"</div>\n\n" // End right div

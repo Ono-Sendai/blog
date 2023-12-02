@@ -140,7 +140,7 @@ void renderNewPostPage(DataStore& data_store, const web::RequestInfo& request_in
 	page_out += "<form action=\"new_post_post\" method=\"post\">\n";
 	
 	page_out += "Title: <input size=\"80\" type=\"text\" name=\"title\" />   <br/>\n";
-	page_out += "Content: <textarea rows=\"20\" cols=\"80\" name=\"content\"></textarea>   <br/>\n";
+	page_out += "Content: <textarea rows=\"60\" cols=\"200\" name=\"content\"></textarea>   <br/>\n";
 	page_out += "Published: <input type=\"checkbox\" name=\"published\" value=\"checked\" ><br/>\n";
 	page_out += "<input type=\"submit\" value=\"Submit\" / >\n";
 	
@@ -297,7 +297,7 @@ void renderEditPostPage(DataStore& data_store, const web::RequestInfo& request_i
 				page_out += "<form action=\"edit_post_post?post_id=" + toString(post_i) + "\" method=\"post\">\n";
 	
 				page_out += "Title: <textarea rows=\"1\" cols=\"80\" name=\"title\">" + post.title.HTMLEscaped() + "</textarea><br/>\n";
-				page_out += "Content: <textarea rows=\"20\" cols=\"80\" name=\"content\">" + post.content.HTMLEscaped() + "</textarea>   <br/>\n";
+				page_out += "Content: <textarea rows=\"60\" cols=\"200\" name=\"content\">" + post.content.HTMLEscaped() + "</textarea>   <br/>\n";
 				page_out += std::string("Published: <input type=\"checkbox\" name=\"published\" value=\"checked\" ") + (post.published ? "checked" : "") + "><br/>\n";
 				page_out += "<input type=\"submit\" value=\"Submit\" / >\n";
 	

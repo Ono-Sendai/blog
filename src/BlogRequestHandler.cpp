@@ -18,12 +18,14 @@ Copyright Nicholas Chapman 2023 -
 #include "RequestHandler.h"
 #include "BlogHandlers.h"
 #include "PageHandlers.h"
+#include <Escaping.h>
 #include <StringUtils.h>
 #include <Parser.h>
 #include <MemMappedFile.h>
 #include <ConPrint.h>
 #include <FileUtils.h>
 #include <Exception.h>
+#include <Lock.h>
 
 
 BlogRequestHandler::BlogRequestHandler()
@@ -191,19 +193,24 @@ void BlogRequestHandler::handleRequest(const web::RequestInfo& request, web::Rep
 			}
 			else
 			{
-				// Look up in page_url_map
 				string_view url_title;
 				p.parseToCharOrEOF('/', url_title);
-				auto res = data_store->page_url_map.find(url_title.to_string()); // NOTE: should really lock data_store here.
-				if(res == data_store->page_url_map.end())
+
+				const std::string unescaped_URL_title = web::Escaping::URLUnescape(url_title.to_string());
+
+				// Look up in page_url_map
+				int page_id = -1;
 				{
+					Lock lock(data_store->mutex);
+					auto res = data_store->page_url_map.find(unescaped_URL_title);
+					if(res != data_store->page_url_map.end())
+						page_id = res->second;
+				}
+
+				if(page_id == -1)
 					BlogHandlers::renderNotFoundPage(*data_store, request, reply_info);
-				}
 				else
-				{
-					const int page_id = res->second;
 					PageHandlers::renderShowPagePage(*data_store, request, reply_info, page_id);
-				}
 			}
 		}
 		// RSS
