@@ -346,6 +346,9 @@ if(WIN32)
 #	# 'unreferenced formal parameter'
 	add_definitions(/wd4100)
 
+
+	add_definitions(/std:c++17)
+	
 	################################
 	
 	# Consider some options.
@@ -372,7 +375,7 @@ else() # Linux
 	#add_definitions(-D__SSSE3__ -D__NO_AVX__)
 
 	#SET(LINUX_C_CXX_OPTIONS "-Wall -fPIC -pthread -mmmx -msse -msse2 -mssse3")
-	SET(LINUX_C_CXX_OPTIONS "-Wall -pthread -std=c++0x")
+	SET(LINUX_C_CXX_OPTIONS "-Wall -pthread -std=c++17")
 	
 	# Turn on address sanitizer if requested.  See http://code.google.com/p/address-sanitizer/wiki/AddressSanitizer 
 	if(INDIGO_USE_ASAN)

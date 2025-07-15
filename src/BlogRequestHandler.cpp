@@ -196,7 +196,7 @@ void BlogRequestHandler::handleRequest(const web::RequestInfo& request, web::Rep
 				string_view url_title;
 				p.parseToCharOrEOF('/', url_title);
 
-				const std::string unescaped_URL_title = web::Escaping::URLUnescape(url_title.to_string());
+				const std::string unescaped_URL_title = web::Escaping::URLUnescape(toString(url_title));
 
 				// Look up in page_url_map
 				int page_id = -1;
