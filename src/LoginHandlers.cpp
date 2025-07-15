@@ -89,10 +89,10 @@ void handleLoginPost(DataStore& data_store, const web::RequestInfo& request_info
 	// Try and log in user
 	if(request_info.post_fields.size() == 2)
 	{
-		if(request_info.post_fields[0].key == "email-address" && request_info.post_fields[1].key == "password")
+		if(request_info.post_fields[0]->key == "email-address" && request_info.post_fields[1]->key == "password")
 		{
-			const web::UnsafeString& email_address = request_info.post_fields[0].value;
-			const web::UnsafeString& password =      request_info.post_fields[1].value;
+			const web::UnsafeString& email_address = request_info.post_fields[0]->getContentAsString();
+			const web::UnsafeString& password =      request_info.post_fields[1]->getContentAsString();
 			conPrint("handleLoginPost(): email-address: '" + email_address.str() + "'");
 
 			Lock lock(data_store.mutex);
@@ -110,7 +110,7 @@ void handleLoginPost(DataStore& data_store, const web::RequestInfo& request_info
 				UserWebSessionRef session = new UserWebSession();
 				session->id = UserWebSession::generateRandomKey();
 				session->user_index = 0;
-				session->created_time = web::TimeStamp::currentTime();
+				session->created_time = TimeStamp::currentTime();
 
 				data_store.user_web_sessions[session->id] = session;
 

@@ -27,7 +27,7 @@ public:
 	void writeToStream(OutStream& s);
 	void readFromStream(InStream& s);
 
-	web::TimeStamp timestamp;
+	TimeStamp timestamp;
 
 	web::UnsafeString title;
 	web::UnsafeString content;

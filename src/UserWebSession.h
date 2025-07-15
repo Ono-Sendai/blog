@@ -6,7 +6,7 @@ Copyright Nicholas Chapman 2023 -
 #pragma once
 
 
-#include "TimeStamp.h"
+#include <TimeStamp.h>
 #include <ThreadSafeRefCounted.h>
 #include <Reference.h>
 #include <OutStream.h>
@@ -31,7 +31,7 @@ public:
 
 	int user_index;
 
-	web::TimeStamp created_time;
+	TimeStamp created_time;
 };
 
 

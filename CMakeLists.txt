@@ -156,15 +156,11 @@ ${WEBSITE_CORE_DIR}/Response.cpp
 ${WEBSITE_CORE_DIR}/Response.h
 ${WEBSITE_CORE_DIR}/ResponseUtils.cpp
 ${WEBSITE_CORE_DIR}/ResponseUtils.h
-${WEBSITE_CORE_DIR}/Log.cpp
-${WEBSITE_CORE_DIR}/Log.h
 ${WEBSITE_CORE_DIR}/StressTest.cpp
 ${WEBSITE_CORE_DIR}/StressTest.h
-${WEBSITE_CORE_DIR}/TimeStamp.cpp
-${WEBSITE_CORE_DIR}/TimeStamp.h
 ${WEBSITE_CORE_DIR}/WebsiteExcep.h
-${WEBSITE_CORE_DIR}/WorkerThread.cpp
-${WEBSITE_CORE_DIR}/WorkerThread.h
+${WEBSITE_CORE_DIR}/WebWorkerThread.cpp
+${WEBSITE_CORE_DIR}/WebWorkerThread.h
 ${WEBSITE_CORE_DIR}/RequestHandler.cpp
 ${WEBSITE_CORE_DIR}/RequestHandler.h
 ${WEBSITE_CORE_DIR}/UnsafeString.cpp
@@ -296,6 +292,8 @@ ${GLARE_CORE_TRUNK_DIR}/utils/Base64.cpp
 ${GLARE_CORE_TRUNK_DIR}/utils/Base64.h
 ${GLARE_CORE_TRUNK_DIR}/utils/RuntimeCheck.cpp
 ${GLARE_CORE_TRUNK_DIR}/utils/RuntimeCheck.h
+${GLARE_CORE_TRUNK_DIR}/utils/TimeStamp.cpp
+${GLARE_CORE_TRUNK_DIR}/utils/TimeStamp.h
 )
 
 SET(double_conversion_files

@@ -104,7 +104,7 @@ void handleNewPagePost(DataStore& data_store, const web::RequestInfo& request_in
 		page.url_title = request_info.getPostField("url_title");
 		page.title = request_info.getPostField("title");
 		page.content = request_info.getPostField("content");
-		page.created_timestamp = web::TimeStamp::currentTime();
+		page.created_timestamp = TimeStamp::currentTime();
 		page.last_modified_timestamp = page.created_timestamp;
 		page.published = request_info.getPostField("published") == "checked";
 
@@ -177,7 +177,7 @@ void handleEditPagePost(DataStore& data_store, const web::RequestInfo& request_i
 					page.title = request_info.getPostField("title");
 					page.content = request_info.getPostField("content");
 					page.published = request_info.getPostField("published") == "checked";
-					page.last_modified_timestamp = web::TimeStamp::currentTime();
+					page.last_modified_timestamp = TimeStamp::currentTime();
 
 					// Write data store to disk
 					data_store.writeToDisk();

@@ -16,9 +16,9 @@ Copyright Nicholas Chapman 2023 -
 #include <StringUtils.h>
 #include <PlatformUtils.h>
 #include <KillThreadMessage.h>
+#include <FileUtils.h>
 #include <Parser.h>
 #include <MemMappedFile.h>
-#include "RequestInfo.h"
 #include "Response.h"
 #include "User.h"
 #include "Post.h"
@@ -94,6 +94,29 @@ void renderShowPostPage(DataStore& data_store, const web::RequestInfo& request_i
 }
 
 
+static std::string sanitiseString(const std::string& s)
+{
+	std::string res = s;
+	for(size_t i=0; i<s.size(); ++i)
+	{
+		if(!(::isAlphaNumeric(s[i]) || (s[i] == '_')))
+			res[i] = '_';
+	}
+	return res;
+}
+
+
+static std::string sanitiseFilename(const std::string& s)
+{
+	const std::string::size_type dot_index = s.find_last_of('.');
+
+	if(dot_index == std::string::npos)
+		return sanitiseString(s);
+	else
+		return sanitiseString(s.substr(0, dot_index)) + "." + sanitiseString(getTailSubString(s, dot_index + 1));
+}
+
+
 void handleNewPostPost(DataStore& data_store, const web::RequestInfo& request_info, web::ReplyInfo& reply_info)
 {
 	conPrint("handleNewPostPost");
@@ -104,7 +127,7 @@ void handleNewPostPost(DataStore& data_store, const web::RequestInfo& request_in
 		Post post;
 		post.title = request_info.getPostField("title");
 		post.content = request_info.getPostField("content");
-		post.timestamp = web::TimeStamp::currentTime();
+		post.timestamp = TimeStamp::currentTime();
 
 		Lock lock(data_store.mutex);
 		data_store.posts.push_back(post);
@@ -117,6 +140,26 @@ void handleNewPostPost(DataStore& data_store, const web::RequestInfo& request_in
 		catch(web::WebsiteExcep& e)
 		{
 			conPrint("Failed to write datastore to disk: " + e.what());
+		}
+
+		// Save any attached files to disk
+		Reference<web::FormField> file_field = request_info.getPostFieldForNameIfPresent("file");
+		if(file_field && !file_field->filename.empty() && !file_field->content.empty())
+		{
+			try
+			{
+				const std::string sanitised_filename = sanitiseFilename(file_field->filename.str());
+				const std::string write_path = data_store.public_files_dir + "/" + sanitised_filename;
+				if(FileUtils::fileExists(write_path))
+					throw glare::Exception("File already exists at location '" + write_path + "', not overwriting.");
+				FileUtils::writeEntireFile(write_path, (const char*)file_field->content.data(), file_field->content.size());
+
+				conPrint("Saved attachment to '" + write_path + "'.");
+			}
+			catch(glare::Exception& e)
+			{
+				conPrint("Error while saving attached file: " + e.what());
+			}
 		}
 
 		conPrint("Added new post!");
@@ -137,10 +180,11 @@ void renderNewPostPage(DataStore& data_store, const web::RequestInfo& request_in
 	page_out += "<body>";
 	page_out += "</head><h1>New Post</h1><body>";
 
-	page_out += "<form action=\"new_post_post\" method=\"post\">\n";
+	page_out += "<form action=\"new_post_post\" method=\"post\" enctype=\"multipart/form-data\">\n";
 	
 	page_out += "Title: <input size=\"80\" type=\"text\" name=\"title\" />   <br/>\n";
 	page_out += "Content: <textarea rows=\"60\" cols=\"200\" name=\"content\"></textarea>   <br/>\n";
+	page_out += "Attach file: <input type=\"file\" name=\"file\" value=\"\"><br>";
 	page_out += "Published: <input type=\"checkbox\" name=\"published\" value=\"checked\" ><br/>\n";
 	page_out += "<input type=\"submit\" value=\"Submit\" / >\n";
 	
@@ -178,7 +222,26 @@ void handleEditPostPost(DataStore& data_store, const web::RequestInfo& request_i
 					data_store.writeToDisk();
 
 					conPrint("Edited post.");
-				
+				}
+
+				// Save any attached files to disk
+				Reference<web::FormField> file_field = request_info.getPostFieldForNameIfPresent("file");
+				if(file_field && !file_field->filename.empty() && !file_field->content.empty())
+				{
+					try
+					{
+						const std::string sanitised_filename = sanitiseFilename(file_field->filename.str());
+						const std::string write_path = data_store.public_files_dir + "/" + sanitised_filename;
+						if(FileUtils::fileExists(write_path))
+							throw glare::Exception("File already exists at location '" + write_path + "', not overwriting.");
+						FileUtils::writeEntireFile(write_path, (const char*)file_field->content.data(), file_field->content.size());
+
+						conPrint("Saved attachment to '" + write_path + "'.");
+					}
+					catch(glare::Exception& e)
+					{
+						conPrint("Error while saving attached file: " + e.what());
+					}
 				}
 			}
 
@@ -294,10 +357,11 @@ void renderEditPostPage(DataStore& data_store, const web::RequestInfo& request_i
 				page_out += "<body>";
 				page_out += "</head><h1>Edit Post</h1><body>";
 
-				page_out += "<form action=\"edit_post_post?post_id=" + toString(post_i) + "\" method=\"post\">\n";
+				page_out += "<form action=\"edit_post_post?post_id=" + toString(post_i) + "\" method=\"post\" enctype=\"multipart/form-data\">\n";
 	
 				page_out += "Title: <textarea rows=\"1\" cols=\"80\" name=\"title\">" + post.title.HTMLEscaped() + "</textarea><br/>\n";
 				page_out += "Content: <textarea rows=\"60\" cols=\"200\" name=\"content\">" + post.content.HTMLEscaped() + "</textarea>   <br/>\n";
+				page_out += "Attach file: <input type=\"file\" name=\"file\" value=\"\"><br>";
 				page_out += std::string("Published: <input type=\"checkbox\" name=\"published\" value=\"checked\" ") + (post.published ? "checked" : "") + "><br/>\n";
 				page_out += "<input type=\"submit\" value=\"Submit\" / >\n";
 	
