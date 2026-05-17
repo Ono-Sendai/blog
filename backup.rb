@@ -56,7 +56,7 @@ run_command("#{ssh_program} #{$user}@forwardscattering.org \"cp /home/nick/websi
 
 run_command("#{ssh_program} #{$user}@forwardscattering.org \"gzip /home/nick/website/rundir/test_builds/#{timestamped_filename}") # GZip it
 	
-run_command("pscp -P 22 #{$user}@forwardscattering.org:/home/nick/website/rundir/test_builds/#{timestamped_filename}.gz c:/programming/blog/backup/#{timestamped_filename}.gz") # download gzipped file
+run_command("pscp -P 22 #{$user}@forwardscattering.org:/home/nick/website/rundir/test_builds/#{timestamped_filename}.gz c:/code/blog/backup/#{timestamped_filename}.gz") # download gzipped file
 
 
 # TODO: back up stuff in public files
