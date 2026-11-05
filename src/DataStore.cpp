@@ -8,8 +8,9 @@ Copyright Nicholas Chapman 2023 -
 
 #include "WebsiteExcep.h"
 #include <Lock.h>
-#include <FileOutStream.h>
+#include <BufferOutStream.h>
 #include <FileInStream.h>
+#include <FileUtils.h>
 #include <Exception.h>
 #include <ConPrint.h>
 #include <StringUtils.h>
@@ -99,11 +100,13 @@ void DataStore::loadFromDisk()
 }
 
 
+// Writes the datastore to a buffer, then replaces the file at path atomically (write temp file + rename), so that a crash or a full disk
+// while saving can't leave a truncated file.  The previous file is kept as path + ".bak".
 void DataStore::writeToDisk()
 {
 	try
 	{
-		FileOutStream file(path);
+		BufferOutStream file;
 
 		Lock lock(mutex);
 
@@ -134,6 +137,21 @@ void DataStore::writeToDisk()
 
 		for(size_t i=0; i<users.size(); ++i)
 			users[i].writeToStream(file);
+
+		// Keep the previous version as a backup.
+		if(FileUtils::fileExists(path))
+		{
+			try
+			{
+				FileUtils::copyFile(path, path + ".bak");
+			}
+			catch(glare::Exception& e)
+			{
+				conPrint("Warning: failed to back up datastore to '" + path + ".bak': " + e.what());
+			}
+		}
+
+		FileUtils::writeEntireFileAtomically(path, (const char*)file.buf.data(), file.buf.size());
 	}
 	catch(glare::Exception& e)
 	{
