@@ -38,10 +38,13 @@ BlogRequestHandler::~BlogRequestHandler()
 }
 
 
-static bool isLetsEncryptFileQuerySafe(const std::string& s)
+// ACME challenge tokens are base64url: A-Z, a-z, 0-9, '-' and '_' (RFC 8555 section 8.3).  Only allowing those also rules out '/' and '.', so the token can't escape the challenge dir.
+static bool isValidACMEChallengeToken(const std::string& s)
 {
+	if(s.empty() || s.size() > 256)
+		return false;
 	for(size_t i=0; i<s.size(); ++i)
-		if(!(::isAlphaNumeric(s[i]) || (s[i] == '-') || (s[i] == '_') || (s[i] == '.')))
+		if(!(::isAlphaNumeric(s[i]) || (s[i] == '-') || (s[i] == '_')))
 			return false;
 	return true;
 }
@@ -251,10 +254,10 @@ void BlogRequestHandler::handleRequest(const web::RequestInfo& request, web::Rep
 		}
 		else if(::hasPrefix(request.path, "/.well-known/acme-challenge/")) // Support for Let's encrypt: Serve up challenge response file.
 		{
-			const std::string filename = ::eatPrefix(request.path, "/.well-known/acme-challenge/");
-			if(!isLetsEncryptFileQuerySafe(filename))
+			const std::string token = ::eatPrefix(request.path, "/.well-known/acme-challenge/");
+			if(!isValidACMEChallengeToken(token))
 			{
-				web::ResponseUtils::writeHTTPOKHeaderAndData(reply_info, "invalid/unsafe file query");
+				web::ResponseUtils::writeHTTPNotFoundHeaderAndData(reply_info, "Not found");
 				return;
 			}
 
@@ -262,12 +265,12 @@ void BlogRequestHandler::handleRequest(const web::RequestInfo& request, web::Rep
 			try
 			{
 				std::string contents;
-				FileUtils::readEntireFile(data_store->letsencrypt_webroot + "/.well-known/acme-challenge/" + filename, contents);
-				web::ResponseUtils::writeHTTPOKHeaderAndData(reply_info, contents);
+				FileUtils::readEntireFile(data_store->letsencrypt_webroot + "/.well-known/acme-challenge/" + token, contents);
+				web::ResponseUtils::writeHTTPOKHeaderAndData(reply_info, contents.data(), contents.size(), /*content type=*/"text/plain");
 			}
-			catch(FileUtils::FileUtilsExcep& e)
+			catch(glare::Exception&)
 			{
-				web::ResponseUtils::writeHTTPOKHeaderAndData(reply_info, "Failed to load file '" + filename + "': " + e.what());
+				web::ResponseUtils::writeHTTPNotFoundHeaderAndData(reply_info, "Not found");
 			}
 		}
 		else

@@ -60,7 +60,7 @@ set(GLARE_CORE_LIBS_ENV "$ENV{GLARE_CORE_LIBS}")
 MESSAGE("GLARE_CORE_LIBS_ENV: ${GLARE_CORE_LIBS_ENV}")
 
 
-set(INDIGO_LIBRESSL_VERSION "3.5.2")
+set(INDIGO_LIBRESSL_VERSION "4.4.0")
 set(INDIGO_OPENSSL_VERSION "1.0.2a")
 
 
@@ -231,6 +231,8 @@ ${GLARE_CORE_TRUNK_DIR}/utils/FileOutStream.cpp
 ${GLARE_CORE_TRUNK_DIR}/utils/FileOutStream.h
 ${GLARE_CORE_TRUNK_DIR}/utils/FileUtils.cpp
 ${GLARE_CORE_TRUNK_DIR}/utils/FileUtils.h
+${GLARE_CORE_TRUNK_DIR}/utils/FileWatcherThread.cpp
+${GLARE_CORE_TRUNK_DIR}/utils/FileWatcherThread.h
 ${GLARE_CORE_TRUNK_DIR}/utils/IncludeWindows.h
 ${GLARE_CORE_TRUNK_DIR}/utils/InStream.cpp
 ${GLARE_CORE_TRUNK_DIR}/utils/InStream.h
@@ -347,8 +349,10 @@ if(WIN32)
 	add_definitions(/wd4100)
 
 
+	# Use C++17	
 	add_definitions(/std:c++17)
-	
+	add_definitions(/Zc:__cplusplus) # Make the __cplusplus macro show the updated, actual C++ version.
+
 	################################
 	
 	# Consider some options.
