@@ -1,6 +1,9 @@
 #
-# Copies a timestamped website.data from the forwardscattering.org server to the local backup dir.
+# Backs up the blog from the forwardscattering.org server to the local backup dir:
+#   * website.data (the DB), as a timestamped .data.gz
+#   * blog_public_files (images, videos etc.), as a timestamped .tar
 #
+# Usage: ruby backup.rb [--user nick] [--dir c:/code/blog/backup]
 #
 
 require './script_utils.rb'
@@ -8,6 +11,9 @@ require './script_utils.rb'
 
 def printUsage()
 	puts "Usage: backup.rb [arguments]"
+	puts ""
+	puts "  --user, -u    Username on server (default: USERNAME env var)"
+	puts "  --dir, -d     Local backup dir (default: backup dir next to this script)"
 	puts ""
 end
 
@@ -17,19 +23,16 @@ def run_command(s)
 end
 
 
-#if(ARGV.length == 0)
-#	printUsage()
-#	exit(1)
-#end
-
-	
 $user = ENV["USERNAME"]
+$backup_dir = File.join(File.dirname(File.expand_path(__FILE__)), "backup")
 
 arg_parser = ArgumentParser.new(ARGV)
 
 arg_parser.options.each do |opt|
 	if opt[0] == "--user" || opt[0] == "-u"
 		$user = opt[1]
+	elsif opt[0] == "--dir" || opt[0] == "-d"
+		$backup_dir = opt[1]
 	elsif opt[0] == "--help" || opt[0] == "-h"
 		printUsage()
 		exit 0
@@ -39,24 +42,44 @@ arg_parser.options.each do |opt|
 	end
 end
 
-if $user == nil
-	STDERR.puts "Error: Username must be specified."
+if $user == nil || $backup_dir == nil
+	STDERR.puts "Error: user and dir must be specified."
 	exit 1
 end
 
 
 # -batch removes interactive prompt.
-ssh_program = "plink -P 22 -batch" if OS.windows?
-ssh_program = "ssh" if !OS.windows?
+ssh_program = OS.windows? ? "plink -P 22 -batch" : "ssh"
+scp_program = OS.windows? ? "pscp -P 22 -batch" : "scp -P 22"
 
-suffix = "#{Time.now.year}_#{Time.now.month}_#{Time.now.day}__#{Time.now.hour}_#{Time.now.min}"
-timestamped_filename = "website_#{suffix}.data"
-	
-run_command("#{ssh_program} #{$user}@forwardscattering.org \"cp /home/nick/website/rundir/test_builds/website.data /home/nick/website/rundir/test_builds/#{timestamped_filename}") # Copy server state bin to timestamped file
+host = "forwardscattering.org"
 
-run_command("#{ssh_program} #{$user}@forwardscattering.org \"gzip /home/nick/website/rundir/test_builds/#{timestamped_filename}") # GZip it
-	
-run_command("pscp -P 22 #{$user}@forwardscattering.org:/home/nick/website/rundir/test_builds/#{timestamped_filename}.gz c:/code/blog/backup/#{timestamped_filename}.gz") # download gzipped file
+suffix = Time.now.strftime("%Y_%m_%d__%H_%M")
 
+db_filename  = "website_#{suffix}.data.gz"
+tar_filename = "blog_public_files_#{suffix}.tar"
 
-# TODO: back up stuff in public files
+remote_db_path  = "/tmp/#{db_filename}"
+remote_tar_path = "/tmp/#{tar_filename}"
+
+Dir.mkdir($backup_dir) if !Dir.exist?($backup_dir)
+
+begin
+	# GZip the DB into a temp file on the server.  (website.data is written atomically with a rename, so reading it while the server is running is fine.)
+	run_command("#{ssh_program} #{$user}@#{host} \"gzip -c /home/nick/website/rundir/test_builds/website.data > #{remote_db_path}\"")
+
+	# Tar the public files on the server.  Not compressed as the files are mostly jpg/png/mp4 which are already compressed.
+	run_command("#{ssh_program} #{$user}@#{host} \"tar -C /home/nick -cf #{remote_tar_path} blog_public_files\"")
+
+	# Download both
+	run_command("#{scp_program} #{$user}@#{host}:#{remote_db_path} \"#{File.join($backup_dir, db_filename)}\"")
+	run_command("#{scp_program} #{$user}@#{host}:#{remote_tar_path} \"#{File.join($backup_dir, tar_filename)}\"")
+ensure
+	# Remove the temp files from the server, even if something failed.
+	exec_command_no_exit("#{ssh_program} #{$user}@#{host} \"rm -f #{remote_db_path} #{remote_tar_path}\"")
+end
+
+[db_filename, tar_filename].each do |f|
+	path = File.join($backup_dir, f)
+	puts "Backed up to #{path} (#{'%.1f' % (File.size(path) / (1024.0 * 1024.0))} MB)"
+end

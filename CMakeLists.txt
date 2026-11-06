@@ -296,6 +296,12 @@ ${GLARE_CORE_TRUNK_DIR}/utils/RuntimeCheck.cpp
 ${GLARE_CORE_TRUNK_DIR}/utils/RuntimeCheck.h
 ${GLARE_CORE_TRUNK_DIR}/utils/TimeStamp.cpp
 ${GLARE_CORE_TRUNK_DIR}/utils/TimeStamp.h
+${GLARE_CORE_TRUNK_DIR}/utils/JSONWriteUtils.cpp
+${GLARE_CORE_TRUNK_DIR}/utils/JSONWriteUtils.h
+${GLARE_CORE_TRUNK_DIR}/utils/ArrayRef.cpp
+${GLARE_CORE_TRUNK_DIR}/utils/ArrayRef.h
+${GLARE_CORE_TRUNK_DIR}/utils/FastPoolAllocator.cpp
+${GLARE_CORE_TRUNK_DIR}/utils/FastPoolAllocator.h
 )
 
 SET(double_conversion_files
@@ -379,7 +385,7 @@ else() # Linux
 	#add_definitions(-D__SSSE3__ -D__NO_AVX__)
 
 	#SET(LINUX_C_CXX_OPTIONS "-Wall -fPIC -pthread -mmmx -msse -msse2 -mssse3")
-	SET(LINUX_C_CXX_OPTIONS "-Wall -pthread -std=c++17")
+	SET(LINUX_C_CXX_OPTIONS "-Wall -pthread -std=c++17 -msse4")
 	
 	# Turn on address sanitizer if requested.  See http://code.google.com/p/address-sanitizer/wiki/AddressSanitizer 
 	if(INDIGO_USE_ASAN)

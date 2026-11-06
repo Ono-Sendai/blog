@@ -16,3 +16,21 @@ systemctl status nick-blog.service
 
 and the log with
 sudo journalctl --unit=nick-blog.service
+
+
+Running as nick (not root)
+--------------------------
+The service runs as user nick.  The unit gives it CAP_NET_BIND_SERVICE so it can bind ports 80 and 443.
+
+The blog reads the Let's Encrypt cert and key directly from /etc/letsencrypt/live/forwardscattering.org/
+(and watches that dir, reloading the cert when certbot renews it), so group nick needs read access:
+
+sudo chgrp nick /etc/letsencrypt/live /etc/letsencrypt/archive
+sudo chmod 750 /etc/letsencrypt/live /etc/letsencrypt/archive
+sudo chgrp nick /etc/letsencrypt/archive/forwardscattering.org/privkey*.pem
+sudo chmod 640 /etc/letsencrypt/archive/forwardscattering.org/privkey*.pem
+
+certbot gives renewed private keys the same group and mode as the previous one, so this only needs doing once.
+/etc/letsencrypt/accounts stays root-only.
+
+LibreSSL is installed to /usr/local/lib by 'make install'; run 'sudo ldconfig' afterwards so the blog can find the libraries.
